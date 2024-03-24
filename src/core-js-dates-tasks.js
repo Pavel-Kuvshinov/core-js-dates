@@ -71,8 +71,16 @@ function getDayName(date) {
  * Date('2024-02-13T00:00:00Z') => Date('2024-02-16T00:00:00Z')
  * Date('2024-02-16T00:00:00Z') => Date('2024-02-23T00:00:00Z')
  */
-function getNextFriday(/* date */) {
-  throw new Error('Not implemented');
+function getNextFriday(date) {
+  let nextDay = date.getDate();
+  const weekDay = date.getDay();
+  if (weekDay < 5) {
+    nextDay += 5 - weekDay;
+  } else {
+    nextDay += 7 - (weekDay - 5);
+  }
+  date.setDate(nextDay);
+  return date;
 }
 
 /**
@@ -141,8 +149,9 @@ function isDateInPeriod(date, period) {
  * '1999-01-05T02:20:00.000Z' => '1/5/1999, 2:20:00 AM'
  * '2010-12-15T22:59:00.000Z' => '12/15/2010, 10:59:00 PM'
  */
-function formatDate(/* date */) {
-  throw new Error('Not implemented');
+function formatDate(date) {
+  const newDate = new Date(date);
+  return newDate.toLocaleString('en-US', { timeZone: 'UTC' });
 }
 
 /**
@@ -157,8 +166,19 @@ function formatDate(/* date */) {
  * 12, 2023 => 10
  * 1, 2024 => 8
  */
-function getCountWeekendsInMonth(/* month, year */) {
-  throw new Error('Not implemented');
+function getCountWeekendsInMonth(month, year) {
+  const daysMonth = new Date(year, month, 0).getDate();
+  let weekendCount = 0;
+
+  for (let day = 1; day <= daysMonth; day += 1) {
+    const currentDate = new Date(year, month - 1, day);
+
+    if (currentDate.getDay() === 6 || currentDate.getDay() === 0) {
+      weekendCount += 1;
+    }
+  }
+
+  return weekendCount;
 }
 
 /**
@@ -188,8 +208,12 @@ function getWeekNumberByDate(/* date */) {
  * Date(2024, 0, 13) => Date(2024, 8, 13)
  * Date(2023, 1, 1) => Date(2023, 9, 13)
  */
-function getNextFridayThe13th(/* date */) {
-  throw new Error('Not implemented');
+function getNextFridayThe13th(date) {
+  let dateCheck = getNextFriday(date);
+  while (dateCheck.getDate() !== 13) {
+    dateCheck = new Date(dateCheck.setDate(dateCheck.getDate() + 7));
+  }
+  return dateCheck;
 }
 
 /**
@@ -203,8 +227,8 @@ function getNextFridayThe13th(/* date */) {
  * Date(2024, 5, 1) => 2
  * Date(2024, 10, 10) => 4
  */
-function getQuarter(/* date */) {
-  throw new Error('Not implemented');
+function getQuarter(date) {
+  return Math.ceil((date.getMonth() + 1) / 3);
 }
 
 /**
